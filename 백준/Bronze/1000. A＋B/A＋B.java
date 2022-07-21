@@ -5,8 +5,9 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 
 // BufferedReader 의 경우 문자열을 받는 대표적인 방법은 readLine()과 read()이다.
-// readLine()은 한 행을 읽어오고, read()는 한 문자만 일겅온다.
+// readLine()은 한 행을 읽어오고, read()는 한 문자만 읽어온다.
 // 특별한 경우가 없는 한 대부분 readLine()을 사용
+
 public class Main 
 {
 	public static void main(String[] args) throws IOException
