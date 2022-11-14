@@ -1,33 +1,42 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.StringTokenizer;
-
-public class Main 
-{
-	public static int T = 0;
+ 
+public class Main {
+ 
+	static int[][] dp;
+ 
 	public static void main(String[] args) throws IOException 
-	{	
+	{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+ 
 		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-		int A = Integer.parseInt(st.nextToken());
-		int B = Integer.parseInt(st.nextToken());
-		
-		int G = 1;
-		int D = 1;
-
-		for(int i =0 ;i<B;i++)
+ 
+		int N = Integer.parseInt(st.nextToken());
+		int K = Integer.parseInt(st.nextToken());
+ 
+		dp = new int[N + 1][K + 1];
+ 
+		System.out.println(BC(N, K));
+ 
+	}
+ 
+	static int BC(int n, int k) 
+	{
+		// 이미 풀었던 sub문제일 경우 값을 재활용
+		if (dp[n][k] > 0) 
 		{
-			G *= (A-i);
+			return dp[n][k];
 		}
-
-		while(B > 0)
+ 
+		// 2번 성질
+		if (k == 0 || n == k) 
 		{
-			D *= B;
-			B--;
+			return dp[n][k] = 1;
 		}
-		System.out.println(G/D);
-	
+ 
+		// 1번 성질, 2번 성질을 만족할 때까지 줄여가는 방식
+		return dp[n][k] = BC(n - 1, k - 1) + BC(n - 1, k);
 	}
 }
