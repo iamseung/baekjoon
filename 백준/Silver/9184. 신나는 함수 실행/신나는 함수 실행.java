@@ -48,7 +48,7 @@ public class Main
 		}
 		if(a>20 || b>20 || c>20)
 		{
-			return dp[20][20][20] = w(20, 20, 20);
+			return dp[20][20][20] = (int)Math.pow(2,20);
 		}
 		else if(a<b && b<c)
 		{
