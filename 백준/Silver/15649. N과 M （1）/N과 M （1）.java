@@ -1,47 +1,131 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main 
 {
-	public static int[] arr;
-	public static boolean[] visit;
-	public static StringBuilder sb = new StringBuilder();	// 정적타입으로 해주어야한다.
+  	static StringBuilder sb = new StringBuilder();
+
+	static int N, M;
+	static int[] selected;
+
+	static void input() 
+	{
+        FastReader scan = new FastReader();
+        N = scan.nextInt();
+        M = scan.nextInt();
+
+        selected = new int[M + 1];
+    }
 	
 	public static void main(String[] args) throws IOException
 	{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
- 
-		int N = Integer.parseInt(st.nextToken());
-		int M = Integer.parseInt(st.nextToken());
- 
-		arr = new int[M];
-		visit = new boolean[N];
-		dfs(N, M, 0);
-		// 마지막에 한 번에 출력
-		System.out.println(sb);
- 
+    	input();
+		
+		rec_function(1);
+
+		System.out.println(sb.toString());
 	}
- 
-	public static void dfs(int N, int M, int depth) 
+
+    static void rec_function(int k)
+    {
+        if(k == M+1)
+        {
+            for(int i=1;i<=M;i++)
+            {
+                sb.append(selected[i]).append(" ");
+            }
+            sb.append("\n");
+        }
+        else
+        {
+			// 1 - N까지 출력
+            for(int cand = 1; cand <= N; cand++)
+            {
+				boolean isUsed = false;
+
+                for(int i=1; i<k; i++)
+				{
+					if(cand == selected[i])
+					{
+						isUsed = true;
+						continue;
+					}
+				}
+
+				if(!isUsed)
+				{
+					selected[k] = cand;
+					
+					// k+1번 ~ M번을 모두 탐색하는 일
+					rec_function(k+1);
+
+					// 탐색이 끝나면 0으로 초기화
+					selected[k] = 0;
+				}
+            }
+        }
+    }
+
+	static class FastReader 
 	{
-		if (depth == M) {
-			for (int val : arr) {
-				sb.append(val).append(' ');
-			}
-			sb.append('\n');
-			return;
-		}
- 
-		for (int i = 0; i < N; i++) {
-			if (!visit[i]) {
-				visit[i] = true;
-				arr[depth] = i + 1;
-				dfs(N, M, depth + 1);
-				visit[i] = false;
-			}
-		}                                                             
-	}
+        BufferedReader br;
+        StringTokenizer st;
+
+        public FastReader() 
+		{
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
+
+        public FastReader(String s) throws FileNotFoundException 
+		{
+            br = new BufferedReader(new FileReader(new File(s)));
+        }
+
+        String next() 
+		{
+            while (st == null || !st.hasMoreElements()) 
+			{
+                try 
+				{
+                    st = new StringTokenizer(br.readLine());
+                } 
+				catch (IOException e) 
+				{
+                    e.printStackTrace();
+                }
+            }
+
+            return st.nextToken();
+        }
+
+        int nextInt() 
+		{
+            return Integer.parseInt(next());
+        }
+
+        long nextLong() 
+		{
+            return Long.parseLong(next());
+        }
+
+        double nextDouble() 
+		{
+            return Double.parseDouble(next());
+        }
+
+        String nextLine() 
+		{
+            String str = "";
+            try 
+			{
+                str = br.readLine();
+            } 
+			catch (IOException e) 
+			{
+                e.printStackTrace();
+            }
+
+            return str;
+        }
+    }
 }
