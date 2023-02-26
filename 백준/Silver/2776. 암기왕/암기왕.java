@@ -8,15 +8,15 @@ public class Main
 
     static int N, M, T;
     static int[] one, two;
-
+    static HashSet<Integer> A;
     static void input() 
     {
         // 수첩1
         N = scan.nextInt();
-        one = new int[N+1];
+        A = new HashSet<Integer>();
         for(int i=1;i<=N;i++)
         {
-            one[i] = scan.nextInt();
+            A.add(scan.nextInt());
         }
 
         // 수첩2
@@ -28,47 +28,23 @@ public class Main
         }
     }
 
-    static boolean binarySearch(int k)
-    {
-        int L = 1, R = N;
-
-        while(L <= R)
-        {
-            int mid = (L+R)/2;
-
-            if(one[mid] == k) return true;
-
-            if(one[mid] > k)
-            {
-                R = mid - 1;
-            }
-            else
-            {
-                L = mid + 1;
-            }
-        }
-
-        return false;
-    }
+   
     static void pro() 
     {
         // 정렬
         StringBuilder sb = new StringBuilder();
-        Arrays.sort(one, 1, N+1);
         
         // k 는 수첩2에 적혀있는 숫자
         for(int j=1 ; j<=M; j++)
         {
-            if(binarySearch(two[j]))
+            if(A.contains(two[j]))
             {
                 sb.append("1").append("\n");
-                // System.out.println("1");
             }
             else
             {
                 sb.append("0").append("\n");
-                // System.out.println("0");
-            }            
+            }
         }
         System.out.print(sb);
     }
