@@ -1,51 +1,91 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.*;
+import java.lang.Math;
 
-/*
- * [Top-Down]
- * 큰 문제를 호출하여 작은 문제로 호출하여 풀어나가는 방식
- * [Bottom-up]
- * 작은문제부터 풀어가며 전체를 풀어가는, 대개 반복문을 통해 구현
- */
+public class Main {
+    static FastReader scan = new FastReader();
+    static StringBuilder sb = new StringBuilder();
 
-public class Main
-{
-	static Integer dp[];
-	static int arr[];
-	public static void main(String[] args) throws IOException
-	{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int N = Integer.parseInt(br.readLine());
+    static int N;
+    static int[][] Dy;
+    static int[] A;
+    
+    static void input(){
+        N = scan.nextInt();
+        A = new int[N + 1];
+        Dy = new int[N + 1][2];
+        for (int i = 1; i <= N; i++){
+            A[i] = scan.nextInt();
+        }
+    }
 
-		arr = new int[N+1];
-		dp  = new Integer[N+1];
+    static void pro() {
+        // 초기값 구하기
+        Dy[1][0] = 0;
+        Dy[1][1] = A[1];
+        
+        if (N >= 2){
+            Dy[2][0] = A[2];
+            Dy[2][1] = A[1] + A[2];
+        }
 
-		for(int i=1;i<=N;i++)
-		{
-			arr[i] = Integer.parseInt(br.readLine());
-		}
+        // 점화식을 토대로 Dy 배열 채우기
+        for (int i = 3; i <= N; i++){
+            Dy[i][0] = Math.max(Dy[i - 2][0] + A[i], Dy[i - 2][1] + A[i]);
+            Dy[i][1] = Dy[i - 1][0] + A[i];
+        }
+        System.out.println(Math.max(Dy[N][0], Dy[N][1]));
+    }
 
-		/*
-		 * dp[]의 default 값이 null 이므로 
-		 * 0으로 초기화 해주어야 한다.
-		 */
-		dp[0] = arr[0];
-		dp[1] = arr[1];
+    public static void main(String[] args) {
+        input();
+        pro();
+    }
 
-		if(N >= 2) dp[2] = arr[1] + arr[2];
 
-		System.out.println(find(N));
-	}
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
 
-	// 직전 칸은 밟은 상태인지 알 수 없기 때문에 arr 에서 호출을 진행
-	static int find(int N)
-	{
-		if(dp[N] == null)
-		{
-			dp[N] = Math.max(find(N-2), find(N-3) + arr[N-1]) + arr[N];
-		}
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
 
-		return dp[N];
-	}
+        public FastReader(String s) throws FileNotFoundException {
+            br = new BufferedReader(new FileReader(new File(s)));
+        }
+
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
+
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
 }
