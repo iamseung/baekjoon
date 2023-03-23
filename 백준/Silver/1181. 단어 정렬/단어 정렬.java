@@ -1,46 +1,104 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.io.*;
+import java.util.*;
 
-public class Main
+/*
+ * 서로 겹치지 않는 활동에 대해 종료시간이 빠르면 더 많은 활동을 선택할 수 있는 시간이 많아진다는 것
+ * 종료시간을 기준으로 정렬
+ */
+public class Main 
 {
-	public static void main(String[] args) throws IOException
-	{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
+    static FastReader scan = new FastReader();
+    static StringBuilder sb = new StringBuilder();
 
-		int N = Integer.parseInt(br.readLine());
-		String[] arr = new String[N];
-		
-		for(int i=0;i<N;i++)
-		{
-			arr[i] = br.readLine();
-			
-		}
+    static int N;
+    static String[] dic;
 
-		// Arrays.sort 확장
-		Arrays.sort(arr, new Comparator<String>() 
-		{
-			public int compare(String s1, String s2)
-			{
-				if(s1.length() == s2.length()) return s1.compareTo(s2);
-				else return s1.length() - s2.length();
-			}
-		});
+    static void input() 
+    {
+        N = scan.nextInt();
+        dic = new String[N+1];
+        for(int i=1; i<=N; i++) dic[i] = scan.nextLine();
+    }
 
-		StringBuilder sb = new StringBuilder();
- 
-		sb.append(arr[0]).append('\n');
-		
-		for (int i = 1; i < N; i++) 
-		{
-			// 중복되지 않는 단어만 출력
-			if (!arr[i].equals(arr[i - 1])) sb.append(arr[i]).append('\n');
-		}
-		System.out.println(sb);
+    static void pro() 
+    {
+        // Arrays.sort(dic,1,N+1, new Comparator<String>() 
+        Arrays.sort(dic,1,N+1, new Comparator<String>() 
+        {
+            @Override
+            public int compare(String o1, String o2)
+            {
+                // 1. 길이가 짧은 것부터
+                // 2. 길이가 같으면 사전 순으로
+                if(o1.length() == o2.length()) return o1.compareTo(o2);
+				else return o1.length() - o2.length();
+            }
+        });
 
-	}
+        for(int i=1; i<=N; i++)
+        {
+            if(dic[i] == null) continue;
+
+            // 정렬했기 때문에 직전만 확인
+            if(!dic[i].equals(dic[i-1])) sb.append(dic[i]).append("\n");
+        }
+
+        System.out.println(sb);
+    }
+
+    public static void main(String[] args) 
+    {
+        input();
+        pro();
+    }
+
+
+    static class FastReader 
+    {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
+
+        public FastReader(String s) throws FileNotFoundException {
+            br = new BufferedReader(new FileReader(new File(s)));
+        }
+
+        String next() {
+            while(st == null || !st.hasMoreElements()) 
+            {
+                try{
+                    st = new StringTokenizer(br.readLine());
+                } 
+                catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
+
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
 }
