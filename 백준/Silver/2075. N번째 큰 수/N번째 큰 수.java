@@ -6,21 +6,27 @@ public class Main
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
+    static PriorityQueue<Integer> q = new PriorityQueue<Integer>(Collections.reverseOrder());
+
     static int N, T;
     static int[] A;
 
     static void input() 
     {
         N = scan.nextInt();
-        A = new int[N*N+1];
-        for(int i=1; i<=N*N; i++) A[i] = scan.nextInt();
+
+        for(int i=0; i<N*N; i++) q.offer(scan.nextInt());
     }
 
     static void pro() 
     {
-        Arrays.sort(A,1,N*N+1);
+        // N-1 까지 poll
+        while(N-- >1)
+        {
+            q.poll();
+        }
 
-        System.out.println(A[N*N-N+1]);
+        System.out.println(q.poll());
     }
 
     public static void main(String[] args) 
