@@ -6,67 +6,44 @@ public class Main
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-    static class People implements Comparable<People>
-    {
-        int s; // 서류점수
-        int m; // 면접점수
-
-        People(int s, int m)
-        {
-            this.s = s;
-            this.m = m;
-        }
-
-        // 서류점수로 오름차순
-        @Override
-        public int compareTo(People other)
-        {
-            return s - other.s;
-        }
-    }
-
-    static People[] person;
-    static int N;
+    static int T, N;
+    static int[] rank;
 
     static void input() 
     {
-        int T = scan.nextInt();
-        
-        while(T-- >0)
+        T = scan.nextInt();
+
+        while(T-- > 0)
         {
             N = scan.nextInt();
-            person = new People[N+1];
+            rank = new int[N+1];
 
             for(int i=1; i<=N; i++)
             {
                 StringTokenizer st = new StringTokenizer(scan.nextLine(), " ");
-                person[i] = new People(Integer.parseInt(st.nextToken()),Integer.parseInt(st.nextToken()));
+    
+                rank[Integer.parseInt(st.nextToken())] = Integer.parseInt(st.nextToken());
             }
 
             pro();
-        }
-        
+        }    
 
         System.out.println(sb);
     }
 
     static void pro() 
     {
-       Arrays.sort(person, 1, N+1);
+        int cnt = 1, min = rank[1];
 
-       int ans = 1;            // 서류 1등은 통과
-       int min = person[1].m;  // 면접 순위 최소값
+        for(int i=2; i<= N; i++)
+        {
+            if(min < rank[i]) continue;
 
-       for(int i=2; i<=N; i++) // 2등부터 시작
-       {
-            if(person[i].m < min) // 최소 면접 순위보다 개인의 면접 순위가 높다면 
-            {
-                min = person[i].m; // 최소 면접 순위 Update
-                ans++;             // count ++
-            }
-       }
+            min = rank[i];
+            cnt++;
+        }
 
-       sb.append(ans+"\n");
+        sb.append(cnt+"\n");
     }
 
     public static void main(String[] args) 
