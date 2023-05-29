@@ -1,90 +1,46 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-public class Main 
-{
-    static FastReader scan = new FastReader();
-    static StringBuilder sb = new StringBuilder();
-
-    static int one, two;
-
-    static void input() 
-    {
-        String str = scan.nextLine();
-        for(int i=0; i<str.length(); i++)
-        {
-            if(str.charAt(i) == '0')
-                one++;
-            else
-                two++;
+public class Main {
+    private void solution() throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String s = br.readLine();
+        char[] arr = new char[s.length()];
+        int cnt0 = 0;
+        int cnt1 = 0;
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = s.charAt(i);
+            if (arr[i] == '0') cnt0++;
+            else cnt1++;
         }
+        cnt0/=2;
+        cnt1/=2;
+
+        for (int i = 0; i < s.length() && cnt1!=0; i++) {
+            if (arr[i] == '1') {
+                cnt1--;
+                arr[i] = 0;
+            }
+        }
+
+        for (int i = s.length()-1; i >= 0 && cnt0!=0; i--) {
+            if (arr[i] == '0') {
+                cnt0--;
+                arr[i] = 0;
+            }
+        }
+
+        StringBuilder answer = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (arr[i] != 0)
+                answer.append(arr[i]);
+        }
+        System.out.println(answer);
     }
 
-	static void pro() 
-    {   
-        one /= 2; two /= 2;
-        while(one-- > 0)
-        {
-            sb.append("0");    
-        }
-
-        while(two-- > 0)
-        {
-            sb.append("1");    
-        }
-
-        System.out.println(sb);
-	}
-
-    public static void main(String[] args) 
-    {
-       input();
-       pro();
-    }
-
-    static class FastReader {
-        BufferedReader br;
-        StringTokenizer st;
-
-        public FastReader() {
-            br = new BufferedReader(new InputStreamReader(System.in));
-        }
-
-        public FastReader(String s) throws FileNotFoundException {
-            br = new BufferedReader(new FileReader(new File(s)));
-        }
-
-        String next() {
-            while (st == null || !st.hasMoreElements()) {
-                try {
-                    st = new StringTokenizer(br.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return st.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
-
-        long nextLong() {
-            return Long.parseLong(next());
-        }
-
-        double nextDouble() {
-            return Double.parseDouble(next());
-        }
-
-        String nextLine() {
-            String str = "";
-            try {
-                str = br.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return str;
-        }
+    public static void main(String[] args) throws Exception {
+        new Main().solution();
     }
 }
