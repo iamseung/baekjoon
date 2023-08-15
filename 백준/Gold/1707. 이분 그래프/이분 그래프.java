@@ -30,11 +30,18 @@ public class Main {
         }
     }
 
-    // 즉, 이분 그래프는 어떤 한 정점에서 연결된 모든 다른 정점이 다른 값을 가져야합니다.
+    /*
+     * 이분 그래프는 어떤 한 정점에서 연결된 모든 다른 정점이 다른 값을 가져야합니다.
+     * int[] visit 으로 표현하자면
+     * 0    : 방문하지 않음
+     * 1,2  : 서로 다른 정점을 표기
+     */
     public static void pro() {
         Queue<Integer> q = new LinkedList<>();
 
+        // 모든 정점을 탐색
         for(int i=1; i<=V; i++) {
+            // 해당 정점을 방문한 적이 없다면 큐에 INSERT
             if(visit[i] == 0) {
                 q.add(i);
                 visit[i] = 1;
@@ -42,25 +49,23 @@ public class Main {
 
             while(!q.isEmpty()) {
                 int now = q.poll();
-
+                // 해당 정점과 연결된 모든 정점탐색 시작
                 for(int j=0; j<adj[now].size(); j++) {
-                    // 연결된 정점이 방문한 적이 없다면
-                    if(visit[adj[now].get(j)] == 0) {
-                        q.add(adj[now].get(j));
-                    }
-                    // 현재 정점과 연결된 정점의 색이 같다면 이분 그래프가 아니다!
-                    if(visit[adj[now].get(j)] == visit[now]) {
+                    int connectedDot = adj[now].get(j);
+
+                    // 현재 정점과 연결된 정점의 색이 같다면 이분 그래프가 아님!
+                    if(visit[connectedDot] == visit[now]) {
                         System.out.println("NO");
                         return;
                     }
-                    if(visit[adj[now].get(j)] == 0) {
-                        if(visit[now] == 1) {
-                            visit[adj[now].get(j)] = 2;
-                        }
+                    // 연결된 정점이 방문한 적이 없다면
+                    if(visit[connectedDot] == 0) {
+                        // 큐에 넣어서 탐색
+                        q.add(connectedDot);
 
-                        if(visit[now] == 2) {
-                            visit[adj[now].get(j)] = 1;
-                        }
+                        // 현재 정점과 다른 색상을 부여
+                        // visit[now] 는 색상을 부여받고 큐에 넣어지기 때문에 0인 가능성을 배제
+                        visit[connectedDot] = (visit[now] == 1) ? 2 : 1;
                     }
                 }
             }
