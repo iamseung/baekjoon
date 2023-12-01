@@ -1,0 +1,16 @@
+-- 코드를 입력하세요
+SELECT 
+    u.USER_ID, 
+    u.NICKNAME, 
+    CONCAT(u.CITY, ' ', u.STREET_ADDRESS1, ' ', u.STREET_ADDRESS2) AS '전체주소',
+    CONCAT(SUBSTR(u.TLNO,1,3), '-',
+          SUBSTR(u.TLNO,4,4), '-',
+          SUBSTR(u.TLNO,8,4)) AS '전화번호'
+    # COUNT(u.USER_ID) AS cnt
+FROM 
+    USED_GOODS_BOARD b
+LEFT JOIN USED_GOODS_USER u
+on b.WRITER_ID = u.USER_ID
+GROUP BY u.USER_Id, u.NICKNAME
+HAVING COUNT(u.USER_ID) >= 3
+ORDER BY u.USER_ID DESC
