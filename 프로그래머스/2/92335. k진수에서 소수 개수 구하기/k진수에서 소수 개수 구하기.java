@@ -4,8 +4,7 @@ class Solution {
     public int solution(int n, int k) {
         int ANS = 0;
         
-        String s = Integer.toString(n,k);
-        StringTokenizer st = new StringTokenizer(s, "0");
+        StringTokenizer st = new StringTokenizer(Integer.toString(n,k), "0");
 
         while (st.hasMoreTokens()) {
             Long N = Long.parseLong(st.nextToken());
