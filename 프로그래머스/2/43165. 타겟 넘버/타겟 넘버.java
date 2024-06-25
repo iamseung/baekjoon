@@ -1,34 +1,32 @@
 import java.util.*;
+import java.util.stream.*;
 
 class Solution {
+    static int len;
     static int[] selected;
-    static int K;
-    static int ANS = 0;
+    static int answer = 0;
     
     public int solution(int[] numbers, int target) {
-        K = numbers.length;
-        selected = new int[K];
-        
-        DFS(0, numbers, target);
-        
-        return ANS;
+        len = numbers.length;
+        selected = new int[len];
+        dfs(0, numbers, target);
+
+        return answer;
     }
-    
-    static void DFS(int k, int[] numbers, int target) {
-        // 모두 select
-        if(k == K) {
-            int sum = 0;
-            for(int s : selected) sum += s;
-            if(sum == target) ANS++;
+
+    static void dfs(int k, int[] numbers, int target) {
+        if(k == len) {
+            int ans = Arrays.stream(selected).sum();
+            if(ans == target)
+                answer++;
+            
             return;
-        } else {
-            selected[k] = numbers[k];
-            
-            DFS(k+1, numbers, target);
-            
-            selected[k] = numbers[k] * -1;
-            
-            DFS(k+1, numbers, target);
         }
+
+        selected[k] = numbers[k];
+        dfs(k+1, numbers, target);
+
+        selected[k] = numbers[k] * -1;
+        dfs(k+1, numbers, target);
     }
 }
