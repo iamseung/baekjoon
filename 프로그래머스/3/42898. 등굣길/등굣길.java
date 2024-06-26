@@ -14,9 +14,11 @@ class Solution {
                 if(dp[i][j] == -1)
                     continue; 
                 
+                // 맨위가 아닌 경우
                 if(i-1 >= 0 && dp[i-1][j] > 0)
                     dp[i][j] += dp[i-1][j];
-                    
+                
+                // 맨 좌측이 아닌 경우
                 if(j-1 >= 0 && dp[i][j-1] > 0)
                     dp[i][j] += dp[i][j-1];
 
