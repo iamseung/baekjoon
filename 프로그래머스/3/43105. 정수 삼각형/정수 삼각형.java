@@ -1,27 +1,30 @@
+import java.util.*;
+import java.util.stream.*;
+
 class Solution {
     public int solution(int[][] triangle) {
-        int[][] dp = new int[triangle.length][triangle.length];
+        int len = triangle.length;
+        int[][] dp = new int[len][len];
         dp[0][0] = triangle[0][0];
-        
-        for (int i = 1; i < triangle.length; i++) {
-            // 맨 왼쪽
-            dp[i][0] = dp[i - 1][0] + triangle[i][0];
-            
-            // 중간
-            for (int j = 1; j <= i; j++) {
-                dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - 1]) + triangle[i][j];
+
+        for(int i=1; i<len; i++) {
+            for(int j=0; j<triangle[i].length; j++) {
+                if(j == 0) {
+                    dp[i][j] = dp[i-1][j] + triangle[i][j];
+                    continue;
+                }
+
+                if(j == triangle[i].length) {
+                    dp[i][j] = dp[i-1][j-1] + triangle[i][j];
+                    continue;
+                }
+
+                dp[i][j] = Math.max(dp[i-1][j-1], dp[i-1][j]) + triangle[i][j];
             }
-            
-            // 맨 오른쪽
-            dp[i][i] = dp[i - 1][i - 1] + triangle[i][i];
         }
-        
-        int answer = 0;
-        
-        for (int i = 0; i < triangle.length; i++) {
-            answer = Math.max(answer, dp[triangle.length - 1][i]);
-        }
-        
+
+        int answer = Arrays.stream(dp[len-1]).max().getAsInt();
+
         return answer;
     }
 }
