@@ -14,7 +14,7 @@ class Solution {
     		stack.push(i);
     	}
         
-        // 남은 idx값은 더 큰녀석이 없음
+        // 남은 idx값은 더 큰 녀석이 없음
     	for(int i : stack) 
     		numbers[i] = -1;
     	
