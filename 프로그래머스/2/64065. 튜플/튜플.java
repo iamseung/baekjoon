@@ -1,24 +1,43 @@
 import java.util.*;
+import java.util.stream.*;
 
 class Solution {
+    static boolean[] num = new boolean[1000001];
+    
     public int[] solution(String s) {
-        Map<String, Integer> count = new HashMap<>();
-        
-        s = s.substring(2, s.length() - 2);
-        
-        // "},{" 로 문자열을 분할
-        String[] parts = s.split("},\\{");
+        // 1. 외부 중괄호 제거
+        s = s.substring(1, s.length() - 1);
 
-        for (String part : parts) {
-            // 각 부분을 콤마로 분할하여 숫자로 변환
-            for (String numStr : part.split(",")) 
-                count.put(numStr, count.getOrDefault(numStr, 0) +1);
+        // 2. 내부 중괄호 기준으로 분할
+        String[] subsets = s.split("},\\{");
+        int[][] result = new int[subsets.length][];
+
+        for (int i = 0; i < subsets.length; i++) {
+            // 3. 중괄호 제거 및 숫자로 분할
+            String[] numbers = subsets[i].replaceAll("[{}]", "").split(",");
+
+            // 4. 숫자 배열 생성
+            result[i] = new int[numbers.length];
+
+            for (int j = 0; j < numbers.length; j++) {
+                result[i][j] = Integer.parseInt(numbers[j].trim());
+            }
         }
-        
-        return count.entrySet()
-            .stream()
-            .sorted(Map.Entry.<String, Integer> comparingByValue().reversed())
-            .mapToInt(entry -> Integer.parseInt(entry.getKey()))
-            .toArray();
+
+        // 길이 순으로 정렬
+        Arrays.sort(result, (o1, o2)->(o1.length - o2.length));
+
+        List<Integer> ans = new ArrayList<>();
+
+        for(int[] a : result) {
+            for(int b : a) {
+                if(!num[b]) {
+                    ans.add(b);
+                    num[b] = true;
+                }
+            }
+        }
+            
+        return ans.stream().mapToInt(i->i).toArray();
     }
 }
