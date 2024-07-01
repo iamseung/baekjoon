@@ -2,17 +2,14 @@ import java.util.*;
 
 class Solution {
     public int solution(int[][] sizes) {
-        int size = sizes.length;
-        int[] small = new int[size];
-        int[] big = new int[size];
-        for(int i=0; i<size; i++) {
-            small[i] = Math.min(sizes[i][0], sizes[i][1]);
-            big[i] = Math.max(sizes[i][0], sizes[i][1]); 
+        int max = 0;
+        int min = 0;
+
+        for(int[] e : sizes) {
+            max = Math.max(max, Math.max(e[0], e[1]));
+            min = Math.max(min, Math.min(e[0], e[1]));
         }
         
-        Arrays.sort(small);
-        Arrays.sort(big);
-        
-        return small[size-1] * big[size-1];
+        return max * min;
     }
 }
