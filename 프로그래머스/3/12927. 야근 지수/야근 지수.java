@@ -2,26 +2,25 @@ import java.util.*;
 
 class Solution {
     public long solution(int n, int[] works) {
-        PriorityQueue<Integer> overtime = new PriorityQueue<>(Collections.reverseOrder());
+        long answer = 0;
 
-        for (int work : works) {
-            overtime.offer(work);
+        PriorityQueue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder());
+
+        for(int w : works)
+            queue.offer(w);
+
+        while (n-- > 0 && !queue.isEmpty()) {
+            int cur = queue.poll();
+            if(cur == 1)
+                continue;
+
+            queue.offer(cur-1);
         }
-        
-        for (int i = 0; i < n; i++) {
-            int max = (int)overtime.poll();
-            if (max <= 0) break;
-            overtime.offer(max - 1);
+
+        while (!queue.isEmpty()) {
+            answer += Math.pow(queue.poll(), 2);
         }
-        
-        return sumPow(overtime);
-    }
-    
-    long sumPow(PriorityQueue<Integer> works) {
-        long sum = 0;
-        while (!works.isEmpty()) {
-            sum += Math.pow(works.poll(), 2);
-        }
-        return sum;
+
+        return answer;
     }
 }
