@@ -1,48 +1,43 @@
 import java.util.*;
+import java.util.stream.*;
 
 class Solution {
-    static ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
-    static boolean[] visited;
-    
-    public int solution(int n, int[][] vertex) {
-        for(int i=0; i<=n; i++)
-            graph.add(new ArrayList<>());
+    public int solution(int n, int[][] edge) {
+        int max = 0;
 
-        for(int[] v : vertex) {
-            graph.get(v[0]).add(v[1]);
-            graph.get(v[1]).add(v[0]);
-        }
+        // distance
+        int[] dist = new int[n+1];
+        for(int i=1; i<=n; i++)
+            Arrays.fill(dist, -1);
+
+        // mapping
+        boolean[][] graph = new boolean[n+1][n+1];
+        for(int[] e : edge)
+            graph[e[0]][e[1]] = graph[e[1]][e[0]] = true;
         
-        visited = new boolean[n+1];
-        return bfs(n);
-    }
-    
-    static int bfs(int n) {
-        Queue<int[]> que = new LinkedList<>();
-        int answer = 0, maxDep = 0;
+        Queue<Integer> queue = new LinkedList<>();
 
-        visited[1] = true;
-        que.add(new int[]{1,0});
+        dist[1] = 0;
+        queue.add(1);
 
-        while(!que.isEmpty()) {
-            int[] q = que.poll();
-            int cur = q[0], dep = q[1];
+        while (!queue.isEmpty()) {
+            int cur = queue.poll();
 
-            if(dep == maxDep) {
-                answer++;
-            } else if(maxDep < dep) {
-                maxDep = dep;
-                answer = 1;
+            for(int i=1; i<=n; i++) {
+                if(dist[i] != -1) continue;
+                if(!graph[cur][i]) continue;
+
+                dist[i] = dist[cur] + 1;
+                queue.add(i);
+
+                max = Math.max(max, dist[i]);
             }
-
-            for(int w : graph.get(cur)) {
-                if(!visited[w]) {
-                    que.add(new int[]{w, dep + 1});
-                    visited[w] = true;
-                }
-            }    
         }
 
-        return answer;
+        final int finalMax = max;
+        
+        return (int) Arrays.stream(dist)
+                        .filter(i-> i == finalMax)
+                        .count();
     }
 }
