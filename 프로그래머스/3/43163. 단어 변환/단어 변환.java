@@ -1,38 +1,42 @@
+import java.util.*;
+
 class Solution {
+    static int count = Integer.MAX_VALUE;
     static boolean[] visited;
-    static int dicLength, cnt = Integer.MAX_VALUE;
+    static int len;
     
     public int solution(String begin, String target, String[] words) {
-        dicLength = begin.length();
-        visited = new boolean[words.length];
-        
-        dfs(0, begin, target, words);
+        len = words.length;
+        visited = new boolean[len];
 
-        return cnt == Integer.MAX_VALUE ? 0 : cnt;
+        dfs(begin, target, words, 0);
+
+        return (count == Integer.MAX_VALUE) ? 0 : count;
     }
     
-    static void dfs(int k, String cur, String target, String[] words) {
+    static void dfs(String cur, String target, String[] words, int depth) {
         if(cur.equals(target)) {
-            cnt = Math.min(cnt, k);
+            count = Math.min(count, depth);
             return;
         }
 
-        for(int i=0; i<words.length; i++) {
+        for(int i=0; i<len; i++) {
             if(cur.equals(words[i])) continue;
             if(visited[i]) continue;
-            if(!isAvailble(cur, words[i])) continue;
+            if(!isCorret(cur, words[i])) continue;
 
             visited[i] = true;
-            dfs(k+1, words[i], target, words);
+            dfs(words[i], target, words, depth+1);
             visited[i] = false;
         }
     }
 
-    static boolean isAvailble(String A, String B) {
+    static boolean isCorret(String cur, String next) {
         int gap = 0;
 
-        for(int i=0; i<dicLength; i++) {
-            if(A.charAt(i) != B.charAt(i)) gap++;
+        for(int i=0; i<cur.length(); i++) {
+            if(next.charAt(i) != cur.charAt(i))
+                gap++;
         }
 
         return gap == 1;
