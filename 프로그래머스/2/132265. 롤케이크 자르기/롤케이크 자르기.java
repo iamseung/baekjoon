@@ -1,28 +1,30 @@
 import java.util.*;
 
 class Solution {
-    static int[] N = new int[10001];
-    static Set<Integer> set= new HashSet<>();
     public int solution(int[] topping) {
-        int ANS = 0, right = 0;
-        for(int t : topping) {
-            if(N[t] == 0) {
-                right++;
-            }
+        int answer = 0;
+
+        Map<Integer, Integer> origin = new HashMap<>();
+        Map<Integer, Integer> rightMap = new HashMap<>();
+
+        for(int t : topping)
+            origin.put(t, origin.getOrDefault(t, 0) + 1);
+
+        for(int i = topping.length - 1; i>= 0; i--) {
+            int key = topping[i];
+
+            origin.put(key, origin.get(key) - 1);            
             
-            N[t]++;
-        }
-        
-        for(int i=0; i<topping.length; i++) {
-            // 왼쪽에 토핑 추가
-            set.add(topping[i]);
-            // 오른쪽 토핑에서 제거
-            N[topping[i]]--;
-            if(N[topping[i]] == 0) right--;
+            if(origin.get(key) == 0)
+                origin.remove(key);
+
+            rightMap.put(key, rightMap.getOrDefault(key, 0) + 1);
+
+            if(origin.size() == rightMap.size())
+                answer++;
             
-            if(set.size() ==  right) ANS++;
         }
-        
-        return ANS;
+
+        return answer;
     }
 }
