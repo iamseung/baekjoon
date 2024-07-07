@@ -2,7 +2,6 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] order) {
-        int answer = 0;
         int[] priority = new int[order.length];
         
         for(int i = 0; i < order.length; i++){
