@@ -2,36 +2,32 @@ import java.util.*;
 
 class Solution {
     public int solution(String skill, String[] skill_trees) {
-        int ANS = 0;
-        // init
-        Queue<Character> que = new LinkedList<>();
-        for(char ch : skill.toCharArray())
-            que.add(ch);
-        
-        for(String sk : skill_trees) {
-            Queue<Character> clonedQueue = new LinkedList<>(que);
-            boolean isLearned = false;
+        int answer = 0;
 
-            for(char tree : sk.toCharArray()) {
-                if(!clonedQueue.isEmpty() && clonedQueue.peek() == tree) {
-                    clonedQueue.poll();
-                }
-            }
+        Map<Character, Integer> idxMap= new HashMap<>();
 
-            boolean valid = true;
-            while (!clonedQueue.isEmpty()) {
-                char c = clonedQueue.poll();
-                for(char tree : sk.toCharArray()) {
-                    if(tree == c) {
-                        valid = false;
-                        break;
-                    }
-                }
-            }
+        for(int i=0; i<skill.length(); i++)
+            idxMap.put(skill.charAt(i), i);
 
-            ANS += valid ? 1 : 0;
+        for(String s : skill_trees) {
+            answer += cal(s, idxMap);
         }
 
-        return ANS;
+        return answer;
+    }
+
+    static int cal(String s, Map<Character, Integer> idxMap) {
+        int idx = 0;
+
+        for(int i=0; i<s.length(); i++) {
+            if(idxMap.containsKey(s.charAt(i))) {
+                if(idxMap.get(s.charAt(i)) != idx)
+                    return 0;
+
+                idx++;
+            }
+        }
+
+        return 1;
     }
 }
