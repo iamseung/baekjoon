@@ -1,25 +1,31 @@
 import java.util.*;
 
-class Solution {    
+class Solution {
     public int solution(int n, int k) {
-        int ANS = 0;
-        
-        StringTokenizer st = new StringTokenizer(Integer.toString(n,k), "0");
+        int answer = 0;
 
-        while (st.hasMoreTokens()) {
-            Long N = Long.parseLong(st.nextToken());
-            if(isPrime(N)) ANS ++;
+        String[] transedString = Integer.toString(n,k).split("0");
+
+        for(String t : transedString) {
+            if(isPrime(t))
+                answer++;
         }
         
-        return ANS;
+        return answer;
     }
     
-    static boolean isPrime(Long k) {
-        if(k <= 1) return false;
+    static boolean isPrime(String s) {
+        if(s.length() == 0)
+            return false;
+        
+        Long N = Long.parseLong(s);
 
-        for(int i=2; i<=(int) Math.sqrt(k); i++) {
-            if(k % i == 0) return false;
-        }
+        if(N < 2)
+            return false;
+
+        for(int i=2; i<= (int) Math.sqrt(N); i++)
+            if(N % i == 0)
+                return false;
 
         return true;
     }
