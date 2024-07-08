@@ -1,8 +1,9 @@
 import java.util.*;
 
 class Solution {
-     public int solution(String str1, String str2) {
-
+    static final int multiply = 65536;
+    
+    public int solution(String str1, String str2) {
         //소문자 대문자 상관없기 때문에 소문자로 만들기
         str1 = str1.toLowerCase();
         str2 = str2.toLowerCase();
@@ -30,6 +31,8 @@ class Solution {
             }
         }
 
+        for(String s : list1)
+            System.out.println(s);
         //str2 두 단어씩 나눠서 list2 에 넣기
         for (int i = 0; i < str2.length() - 1; i++) {
             char c1 = str2.charAt(i);
@@ -63,6 +66,6 @@ class Solution {
             answer = (double) intersection.size() / (double) union.size();
         }
 
-        return (int) (answer * 65536);
+        return (int) (answer * multiply);
     }
 }
