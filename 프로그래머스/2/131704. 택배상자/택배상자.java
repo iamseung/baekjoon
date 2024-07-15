@@ -2,28 +2,27 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] order) {
-        int[] priority = new int[order.length];
-        
-        for(int i = 0; i < order.length; i++){
-            priority[order[i] - 1] = i;
-        }
-        
-        Stack<Integer> stack = new Stack<>();
-        
-        int target = 0;
-     
-        for(int i = 0; i < priority.length; i++){
-            if(priority[i] == target){
-                target++;
-            }else{
-                stack.push(priority[i]);
+        // 컨테이너에 들어갈 idx 번호
+        int idx = 0;
+        int count = 0;
+
+        Stack<Integer> container = new Stack<>();
+
+        for(int i=0; i<order.length; i++) {
+            if(order[idx] - 1 != i) {
+                container.add(i);
+                continue;
             }
-            
-            while(!stack.isEmpty() && stack.peek() == target){
-                stack.pop();
-                target++;
+
+            container.add(i);
+
+            while(!container.isEmpty() && container.peek() == order[idx] - 1) {
+                container.pop();
+                idx++;
+                count++;
             }
         }
-        return target;
+
+        return count;
     }
 }
