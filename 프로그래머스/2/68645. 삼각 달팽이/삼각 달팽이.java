@@ -1,3 +1,4 @@
+import java.util.*;
 import java.util.stream.*;
 
 class Solution {
@@ -25,9 +26,9 @@ class Solution {
                 matrix[--y][--x] = ++index;
             }
         }
-
+        
         return IntStream.range(0, n)
-                    .flatMap(i -> IntStream.range(0, i + 1)
+                    .flatMap(i -> IntStream.rangeClosed(0, i)
                     .map(j -> matrix[i][j]))
                     .toArray();
     }
