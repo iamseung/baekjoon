@@ -16,7 +16,6 @@ class Solution {
     }
     
     public int solution(int[][] board) {
-        int answer = 0;
         int N = board.length;
         Queue<Node> queue = new LinkedList<>();
         queue.offer(new Node(0, 0,-1,0));
