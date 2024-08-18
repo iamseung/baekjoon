@@ -6,12 +6,15 @@ class Solution {
         Stack<Character> stack = new Stack<>();
 
         for (int i = 0; i < number.length(); i++) {
-            char c = number.charAt(i);
-            while (!stack.isEmpty() && stack.peek() < c && k > 0) {
+
+            char current = number.charAt(i);
+
+            while (!stack.isEmpty() && stack.peek() < current && k > 0) {
                 stack.pop();
                 k--;
             }
-            stack.push(c);
+
+            stack.push(current);
         }
 
         // 스택에 남은 문자 중 결과 배열 길이만큼만 사용
