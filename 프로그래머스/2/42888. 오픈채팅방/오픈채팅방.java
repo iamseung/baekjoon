@@ -26,10 +26,8 @@ class Solution {
             } else if (command.equals("Leave")) {
                 answerList.add(uidMap.get(uid) + "님이 나갔습니다.");
             }
-            // Change 명령어는 메시지 출력에 영향을 주지 않으므로 처리하지 않음
         }
 
-        // 리스트를 배열로 변환하여 반환
         return answerList.toArray(new String[0]);
     }
 }
