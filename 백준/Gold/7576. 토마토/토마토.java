@@ -1,146 +1,97 @@
 import java.io.*;
 import java.util.*;
+import java.util.stream.*;
 
-public class Main {
-    static FastReader scan = new FastReader();
-    static StringBuilder sb = new StringBuilder();
+class Main {
 
-    static int N, M, H;
-    static int[][] dist, area;
-    static int[][] dir = {{1,0},{-1,0},{0,1},{0,-1}};
-    
-    static void input() 
-	{
-        M = scan.nextInt(); // 6
-		N = scan.nextInt(); // 4
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static int X, Y;
+    static int[][] tomato, dist;
+    static int[][] dir = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
 
-		area = new int[N][M];
-		dist = new int[N][M];
+    public static void main(String[] args) throws Exception {
+        input();
+        process();
+    }
 
-        for(int i=0; i<N; i++)
-        {
-            for(int j=0; j<M; j++)
-            {
-                area[i][j] = scan.nextInt();
+    static void input() throws Exception {
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        X = Integer.parseInt(st.nextToken());
+        Y = Integer.parseInt(st.nextToken());
+        tomato = new int[Y][X];
+
+        for (int i = 0; i < Y; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < X; j++) {
+                tomato[i][j] = Integer.parseInt(st.nextToken());
             }
         }
     }
 
-	static void bfs()
-	{
-		Queue<Integer> Q = new LinkedList<>();
+    static void process() {
+        // 거리 계산
+        BFS();
 
-        for(int i=0; i<N; i++)
-        {
-            for(int j=0; j<M; j++)
-            {
-                // NO 방문
-                dist[i][j] = -1;
-                // 토마토가 있다면
-                if(area[i][j] == 1)
-                {
-                    dist[i][j] = 0;
-                    Q.add(i);
-                    Q.add(j);
-                }
-            }
-        }
+        int time = Integer.MIN_VALUE;
 
-		while(!Q.isEmpty())
-		{
-			int i = Q.poll();
-			int j = Q.poll();
-
-			for(int k=0;k<4;k++)
-			{
-				int ni = i + dir[k][0];
-				int nj = j + dir[k][1];
-
-				// 범위 예외처리
-				if(ni<0 || nj<0 || ni>=N || nj>=M) continue;
-				// 방문한 적이 있다면
-				if(dist[ni][nj] != -1) continue;
-				// 울타리에 막혀있다면
-				if(area[ni][nj] == -1) continue;
-
-				dist[ni][nj] = dist[i][j] + 1;
-				Q.add(ni); Q.add(nj);
-			}
-		}
-	}
-
-	static void pro()
-	{
-		int ans = Integer.MIN_VALUE;
-		bfs();
-        for(int i=0; i<N; i++)
-        {
-            for(int j=0; j<M; j++)
-            {
-                // 울타리면 pass
-                if(area[i][j] == -1) continue;
-                // 울타리를 제외한 공간에 방문한 적이 없다면 
-                // 울타리에 막혀서 토마토가 접근할 수 없다는 것을 의미
-                if(dist[i][j] == -1){
+        for (int i = 0; i < Y; i++) {
+            for (int j = 0; j < X; j++) {
+                if (tomato[i][j] == -1)
+                    continue;
+                if (dist[i][j] == -1) {
                     System.out.println(-1);
                     return;
-                } 
-                ans = Math.max(ans, dist[i][j]);
+                }
+
+                time = Math.max(time, dist[i][j]);
             }
         }
-		System.out.println(ans);
-	}
 
-    public static void main(String[] args) 
-	{
-		input();
-		pro();
+        System.out.println(time);
     }
 
+    static void BFS() {
+        Queue<int[]> queue = new LinkedList<>();
+        dist = new int[Y][X];
 
-    static class FastReader {
-        BufferedReader br;
-        StringTokenizer st;
+        for (int i = 0; i < Y; i++) {
+            for (int j = 0; j < X; j++) {
+                dist[i][j] = -1;
 
-        public FastReader() {
-            br = new BufferedReader(new InputStreamReader(System.in));
-        }
-
-        public FastReader(String s) throws FileNotFoundException {
-            br = new BufferedReader(new FileReader(new File(s)));
-        }
-
-        String next() {
-            while (st == null || !st.hasMoreElements()) {
-                try {
-                    st = new StringTokenizer(br.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (tomato[i][j] == 1) {
+                    queue.add(new int[] { j, i });
+                    dist[i][j] = 0;
                 }
             }
-            return st.nextToken();
         }
 
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
+        while (!queue.isEmpty()) {
+            int[] q = queue.poll();
 
-        long nextLong() {
-            return Long.parseLong(next());
-        }
+            for (int k = 0; k < 4; k++) {
+                int nx = q[0] + dir[k][0];
+                int ny = q[1] + dir[k][1];
 
-        double nextDouble() {
-            return Double.parseDouble(next());
-        }
+                if (nx < 0 || ny < 0 || nx >= X || ny >= Y)
+                    continue;
+                if (dist[ny][nx] != -1)
+                    continue;
+                if (tomato[ny][nx] == -1)
+                    continue;
 
-        String nextLine() {
-            String str = "";
-            try {
-                str = br.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
+                dist[ny][nx] = dist[q[1]][q[0]] + 1;
+                queue.add(new int[] { nx, ny });
             }
-            return str;
+        }
+    }
+
+    static void print() {
+        System.out.println("--------------------------");
+        for (int i = 0; i < Y; i++) {
+            for (int j = 0; j < X; j++) {
+                System.out.print(dist[i][j] + " ");
+            }
+            System.out.println();
         }
     }
 }
