@@ -45,12 +45,16 @@ public class Main {
         visited = new boolean[N+1];
         visited[R] = true;
 
+        // 기가 노드를 찾아야 하는 경우
         if(nodes[R].size() == 1) {
             visited[nodes[R].get(0)[0]] = true;
             trunk += nodes[R].get(0)[1];
+
+            // 기가 노드에서부터 가지의 최대값 갱신
             findBranch(findTrunk(nodes[R].get(0)[0]), 0);
         } else {
             // 루트에서 간선이 2개 이상이면 루트 노드 = 기가 노드
+            // 루트 노드에서부터 가지의 최대값 갱신
             findBranch(R, 0);
         }
 
