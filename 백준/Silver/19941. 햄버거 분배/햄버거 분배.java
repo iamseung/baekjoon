@@ -1,46 +1,46 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
-    static Scanner sc = new Scanner(System.in);
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static int N,K;
-    static char[] chart;
-    static boolean[] visited;
-    static int answer = 0;
+    static String input;
 
     public static void main(String[] args) throws IOException {
-        input();
+        StringTokenizer st;
+
+        st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+        input = br.readLine(); // P 사람, H 햄버거
+
         process();
     }
 
-    static void input() throws IOException {
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        K = Integer.parseInt(st.nextToken());
+     public static void process() {
+        boolean[] visited = new boolean[N];
+        int answer = 0;
+        char[] arr = input.toCharArray();
 
-        chart = new char[N];
-        chart = br.readLine().toCharArray();
-
-        visited = new boolean[N];
-    }
-
-    static void process() {
         for(int i=0; i<N; i++) {
-            if(chart[i] == 'P') { //사람을 만났다면, K인 것 앞에서부터
-    			for(int j = -K; j <= K; j++) {
-    				if(i + j >= N) break;
-    				if(i + j < 0) continue;
-    				
-    				if(chart[i+j] == 'H' && !visited[i+j]) {
-    					visited[i+j] = true;
-    					answer += 1;
-    					break;
-    				}
-    			}
-    		}
+            // 사람의 경우
+            if(arr[i] == 'P') {
+                for(int j= -K; j <= K; j++) {
+                    int next = i+j;
+
+                    if(next >= N) break; // 범위 초과
+                    if(next < 0) continue; // 예외 처리
+
+                    // 먹지 않은 햄버거일 경우
+                    if(arr[next] == 'H' && !visited[next]) {
+                        visited[next] = true;
+                        answer += 1;
+                        break;
+                    }
+                }
+            }
         }
 
-        System.out.println(answer);
-    }
+         System.out.println(answer);
+     }
 }
