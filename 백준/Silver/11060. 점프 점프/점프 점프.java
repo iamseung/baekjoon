@@ -16,21 +16,25 @@ public class Main {
         arr = new int[N+1];
         dp = new int[N+1];
 
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-        for(int i=1; i<=N; i++) {
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for(int i=1; i<=N; i++)
             arr[i] = Integer.parseInt(st.nextToken());
-            dp[i] = MAX;
-        }
     }
 
     public static void process() {
+        Arrays.fill(dp, MAX);
+
         // 첫번째 칸은 제자리이기 때문에 0
         dp[1] = 0;
         for(int i=1; i<=N; i++) {
-            // i+1 ~ i+1+arr[i] 는 점프할 수 있는 거리
-            for(int j=i+1; j<i+1+arr[i]; j++) {
+            /*
+             * i+1 ~ i+1+arr[i] 는 점프할 수 있는 거리
+             * 해당 칸이 0이면 패스
+             */
+            for(int j=i+1; j<=i+arr[i]; j++) {
                 // 범위 초과에 대한 예외처리
                 if(j>N) continue;
+                
                 // i 에서 한칸 VS j 의 최솟 값을 저장
                 dp[j] = Math.min(dp[i]+1, dp[j]);
             }
